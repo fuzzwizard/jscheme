@@ -2,4 +2,9 @@
 
 An implementation of scheme in Javascript. 
 
-> Note: This is a project for fun. Probably don't use this.
+Features:
+- REPL
+- Code execution
+- ????
+
+> Note: This is a silly project. Probably don't use this.

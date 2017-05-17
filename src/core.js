@@ -68,21 +68,7 @@ const repl = env => {
   }
 }
 
-const main = program => {
-  let result
-  try {
-    result = parse(program)
-    console.log(result)
-  } catch (e) {
-    console.error(e)
-    return 1
-  }
-  return 0
+
+module.exports = {
+  parse
 }
-
-/*
-TODO: Command line args, file reading
-*/
-
-console.log(JSON.stringify(parse(process.argv[2]), null, ' '))
-

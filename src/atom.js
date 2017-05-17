@@ -2,7 +2,8 @@ const { parse_float } = require('./util')
 
 const TypeDef = type => value => ({
   value, type,
-  identity: _ => value // YAGNI?
+  identity: _ => value, // YAGNI?
+  inspect: _ => `${type}( ${type === 'Symbol' ? `:${value}` : value} )`
 })
 
 const AtomTypes = {

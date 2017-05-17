@@ -1,5 +1,10 @@
 const { parse } = require('./src/core')
 
+/*
+TODO: Command line args, file reading
+*/
+
+
 const main = program => {
   let result
   try {
@@ -11,9 +16,5 @@ const main = program => {
   }
   return 0
 }
-
-/*
-TODO: Command line args, file reading
-*/
 
 main(process.argv[2])

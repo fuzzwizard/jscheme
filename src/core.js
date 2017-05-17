@@ -40,7 +40,7 @@ const tokenize = chars =>
 
 const parse = program => read(tokenize(program))
 
-const eval = (x, enviroment = standard_env) => {
+const evaluate = (x, enviroment = standard_env) => {
   const leftmost = x[0]
 
   if (is_symbol(x)) {
@@ -62,13 +62,12 @@ const repl = env => {
   let val
   while (true) {
     log('>> ')
-    val = eval(parse(process.stdin.read()), env)
+    val = evaluate(parse(process.stdin.read()), env)
     newline()
     log(val)
   }
 }
 
+const execute = (program, env = standard_env) => evaluate(parse(program), env)
 
-module.exports = {
-  parse
-}
+module.exports = { execute, parse, evaluate, repl, read, tokenize }

@@ -28,9 +28,10 @@ const standard_env = {
   '>=': op_gte,
   '<=': op_lte,
 
-  'apply':      (fn, ...args) => Array.isArray(args[0])
-                                  ? fn.apply(null, args)
-                                  : fn.call(null, ...args),
+  'apply': (fn, ...args) =>
+    Array.isArray(args[0])
+      ? fn.apply(null, args)
+      : fn.call(null, ...args),
 
   'cons':       (x, y) => [x].concat(y),
   'cdr':        xs => xs.slice(1),

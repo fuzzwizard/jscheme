@@ -1,5 +1,5 @@
 const { standard_env } = require('./env')
-const { Atom } = require('./atom')
+const { Atom } = require('./objects')
 const {
   log, logln, readln, newline, 
   is_list_type, is_symbol_type

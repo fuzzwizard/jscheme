@@ -1,5 +1,5 @@
-const { parse } = require('./src/core')
-
+const { parse, execute } = require('./src/core')
+const { logln } = require('./src/util')
 /*
 TODO: Command line args, file reading
 */
@@ -7,8 +7,8 @@ TODO: Command line args, file reading
 const main = program => {
   let result
   try {
-    result = parse(program)
-    console.log(result)
+    result = execute(program)
+    logln(`result: ${result}`)
   } catch (e) {
     console.error(e)
     return 1

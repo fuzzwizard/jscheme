@@ -1,8 +1,13 @@
 const { standard_env } = require('./env')
 const { Atom } = require('./atom')
 const {
-  log, logln, newline, is_list_type
+  log, logln, readln, newline, 
+  is_list_type, is_symbol_type
 } = require('./util')
+
+Object.prototype.json = function () {
+  return JSON.stringify(this, null, '  ')
+}
 
 const not_implemented = feature => {
   logln(`The feature known as ${feature} hasn\'t been implemented yet!`)
@@ -18,14 +23,17 @@ const read = tokens => {
 
   if (token === '(') {
     const node = []
-    while (tokens[0] !== ')') {
-      node.push(read(tokens))
-    }
-    tokens.shift() // Ditch the ')'
+
+    // Eat the tokens until we hit an ending paren
+    while (tokens[0] !== ')') node.push(read(tokens))
+    tokens.shift() // Ditch the ending paren
+
     return node
   } else if (token === ')') {
+    // We've gone too far!
     throw new SyntaxError('Unexpected delimiter: ")"')
   } else {
+    // Return an atom of the token
     return Atom(token)
   }
 }
@@ -40,23 +48,39 @@ const tokenize = chars =>
 
 const parse = program => read(tokenize(program))
 
-const evaluate = (x, enviroment = standard_env) => {
+const evaluate = (x, env = standard_env) => {
   const leftmost = x[0]
 
-  if (is_symbol(x)) {
-    return enviroment[x]
-  } else if (!is_list(x)) {
-    return x
-  } else if (leftmost === 'if') {       // 'if' proc
-    const [_, test, consequence, alternative] = x
-    const expression = evaluate(test, enviroment) ? consequence : alternative
-    return evaluate(expression, enviroment)
-  } else if (leftmost === 'define') {   // 'define' proc
-    const [_, identifier, expression] = x
-    enviroment[identifier] = evaluate(expression, enviroment)
-  } else {                              // Proceedure call
-    const proc = evaluate(leftmost, enviroment)
+  // Return env variable
+  if (is_symbol_type(x)) {
+    const candidate = env[x.value]
+    if (!candidate) {
+      throw new TypeError(`Symbol(${x.value}) is undefined.`)
+    }
+    return candidate
+  } 
+  // Return atom
+  else if (!Array.isArray(x)) {
+    return x.value
+  }
+  // 'if' proc
+  else if (leftmost === 'if') {
+    const [_, test, consequence, alternative] = x.value
+    const expression = evaluate(test, env) ? consequence : alternative
+    return evaluate(expression, env)
+  }
+  // 'define' proc
+  else if (leftmost === 'define') {
+    const [_, identifier, expression] = x.value
+    env[identifier] = evaluate(expression, env)
+  }
+  // proceedure call
+  else {
+    const proc = evaluate(leftmost, env)
+    logln(`proc is: ${proc}`)
     const args = x.slice(1).map(arg => evaluate(arg, env))
+    logln(`args are: ${args}`)
+    logln(`result should be: ${proc(...args)}`)
     return proc(...args)
   }
 }
@@ -69,7 +93,7 @@ const repl = (prompt = '>> ') => {
   let val
   while (true) {
     log(prompt)
-    val = execute(process.stdin.read())
+    val = execute(readln())
     if (val !== '') logln(val)
   }
 }

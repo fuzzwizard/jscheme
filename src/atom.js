@@ -13,13 +13,15 @@ const AtomTypes = {
 }
 
 const Atom = token => {
+  if (token === null) {
+    return AtomTypes.List([])
+  }
   if (isNaN(token)) {
     if (typeof token === 'string') {
       return AtomTypes.Symbol(token)
     } else if (Array.isArray(token)) {
       return AtomTypes.List(token)
     }
-
     throw new Error('Objects are not supported in jscheme. Sorry!')
   } else {
     return AtomTypes.Number(token)

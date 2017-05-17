@@ -49,39 +49,43 @@ const tokenize = chars =>
 const parse = program => read(tokenize(program))
 
 const evaluate = (x, env = standard_env) => {
-  const leftmost = x[0]
+  const leftmost = (x)[0]
 
-  // Return env variable
-  if (is_symbol_type(x)) {
-    const candidate = env[x.value]
-    if (!candidate) {
-      throw new TypeError(`Symbol(${x.value}) is undefined.`)
+  try {
+    // Return env variable
+    if (is_symbol_type(x)) {
+      const candidate = env[x]
+      if (!candidate) {
+        throw new TypeError(`Symbol(${x}) is undefined.`)
+      }
+      return candidate
+    } 
+    // Return atom
+    else if (!Array.isArray(x)) {
+      return x
     }
-    return candidate
-  } 
-  // Return atom
-  else if (!Array.isArray(x)) {
-    return x.value
-  }
-  // 'if' proc
-  else if (leftmost === 'if') {
-    const [_, test, consequence, alternative] = x.value
-    const expression = evaluate(test, env) ? consequence : alternative
-    return evaluate(expression, env)
-  }
-  // 'define' proc
-  else if (leftmost === 'define') {
-    const [_, identifier, expression] = x.value
-    env[identifier] = evaluate(expression, env)
-  }
-  // proceedure call
-  else {
-    const proc = evaluate(leftmost, env)
-    logln(`proc is: ${proc}`)
-    const args = x.slice(1).map(arg => evaluate(arg, env))
-    logln(`args are: ${args}`)
-    logln(`result should be: ${proc(...args)}`)
-    return proc(...args)
+    // 'if' proc
+    else if (leftmost === 'if') {
+      const [_, test, consequence, alternative] = x.value
+      const expression = evaluate(test, env) ? consequence : alternative
+      return evaluate(expression, env)
+    }
+    // 'define' proc
+    else if (leftmost === 'define') {
+      const [_, identifier, expression] = x.value
+      env[identifier] = evaluate(expression, env)
+    }
+    // proceedure call
+    else {
+      const proc = evaluate(leftmost, env)
+      logln(`proc is: ${proc}`)
+      const args = x.slice(1).map(arg => evaluate(arg, env))
+      logln(`args are: ${args}`)
+      logln(`result should be: ${proc(...args)}`)
+      return proc(...args)
+    }
+  } catch (e) {
+    throw e
   }
 }
 
@@ -97,7 +101,5 @@ const repl = (prompt = '>> ') => {
     if (val !== '') logln(val)
   }
 }
-
-
 
 module.exports = { execute, parse, evaluate, repl, read, tokenize }

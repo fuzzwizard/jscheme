@@ -23,10 +23,9 @@ const newline  = _ => log('\n')
 const logln    = (...s) => console.log(...s)
 const readln   = s => process.stdin.read(s)
 
-const is_symbol_type = ({ type }) => type === 'Symbol'
-const is_number_type = ({ type }) => type === 'Number'
-// I know lists aren't atoms. Just let me live.
-const is_list_type   = ({ type }) => type === 'List'
+const is_symbol_type = atom => typeof atom === 'string'
+const is_number_type = atom => typeof atom === 'number'
+const is_list_type   = list => Array.isArray(list)
 
 module.exports = {
   parse_int, parse_float, log, logln,

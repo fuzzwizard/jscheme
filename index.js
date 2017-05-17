@@ -1,4 +1,4 @@
-const { parse, execute } = require('./src/core')
+const { parse, execute, repl } = require('./src/core')
 const { logln } = require('./src/util')
 /*
 TODO: Command line args, file reading
@@ -11,9 +11,7 @@ const main = program => {
     logln(`result: ${result}`)
   } catch (e) {
     console.error(e)
-    return 1
   }
-  return 0
 }
 
 main(process.argv[2])

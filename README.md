@@ -1,6 +1,6 @@
 # JSCHEME
 
-An implementation of scheme in Javascript. 
+An implementation of Scheme in Javascript. 
 
 Features:
 - REPL

@@ -4,7 +4,7 @@ An implementation of scheme in Javascript.
 
 Features:
 - REPL
-- Code execution
+- Code what works
 - ????
 
 > Note: This is a silly project. Probably don't use this.

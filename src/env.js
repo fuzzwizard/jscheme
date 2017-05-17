@@ -18,8 +18,15 @@ const is_callable    = fn => typeof fn === 'function'
 const is_empty_list  = list => list.length === 0
 
 const standard_env = {
-  '+': op_add, '-': op_subtract, '*': op_multiply, '/': op_divide, '**': op_power,
-  '>': op_gt, '<': op_lt, '>=': op_gte, '<=': op_lte,
+  '+':  op_add,
+  '-':  op_subtract,
+  '*':  op_multiply,
+  '/':  op_divide,
+  '**': op_power,
+  '>':  op_gt,
+  '<':  op_lt,
+  '>=': op_gte,
+  '<=': op_lte,
 
   'apply':      (fn, ...args) => Array.isArray(args[0])
                                   ? fn.apply(null, args)
@@ -29,7 +36,7 @@ const standard_env = {
   'cdr':        xs => xs.slice(1),
   'car':        xs => [xs[0]],
   'eq?':        (a, b) => a === b,
-  
+
   'max':        (a, b) => a >= b ? a : b,
   'min':        (a, b) => a <= b ? a : b,
 
@@ -41,7 +48,7 @@ const standard_env = {
 
   'proceedure?':  is_callable,
   'null?':        is_empty_list,
-  'print':        logln, 
+  'print':        logln,
 }
 
 module.exports = { standard_env }

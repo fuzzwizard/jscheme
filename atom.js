@@ -8,7 +8,7 @@ const TypeDef = type => value => ({
 const AtomTypes = {
   Symbol: x => TypeDef('Symbol') (`${x}`),
   Number: x => TypeDef('Int')    (parse_float(x)),
-  List:   x => TypeDef('List')   (x) // lol
+  List:   x => TypeDef('List')   (x), // lol?
 }
 
 const Atom = token => {

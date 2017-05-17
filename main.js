@@ -1,8 +1,13 @@
 const { standard_env } = require('./env')
 const { Atom } = require('./atom')
 const {
-  log, newline, is_symbol, is_number, is_list, not_implemented
+  log, newline, is_list_type
 } = require('./util')
+
+const not_implemented = feature => {
+  logln(`The feature known as ${feature} hasn\'t been implemented yet!`)
+  return Atom(null)
+}
 
 const read = tokens => {
   if (tokens.length === 0) {
@@ -36,12 +41,18 @@ const tokenize = chars =>
 const parse = program => read(tokenize(program))
 
 const eval = (x, enviroment = standard_env) => {
+  const leftmost = x[0]
+
   if (is_symbol(x)) {
     return enviroment[x]
   } else if (!is_list(x)) {
     return x
-  } else if (x[0] === 'if') {
-    not_implemented()
+  } else if (leftmost === 'if') {
+    not_implemented('if')
+  } else if (leftmost === 'define') {
+    not_implemented('define')
+  } else {
+    not_implemented('proceedure call')
   }
 }
 

@@ -16,17 +16,18 @@ const parse_float = num => {
   return result
 }
 
+// const is_number = num => !isNaN(num)
+
 const log = s => process.stdout.write(s)
 const newline = log('\n')
+const logln = s => log(`${s}\n`)
 
-const is_symbol = ({ type }) => type === 'Symbol'
-const is_number = ({ type }) => type === 'Number'
-const is_list   = ({ type }) => type === 'List'
-
-const not_implemented = _ => console.log('Something hasn\'t been done yet!')
+const is_symbol_type = ({ type }) => type === 'Symbol'
+const is_number_type = ({ type }) => type === 'Number'
+// I know lists aren't atoms. Just let me live.
+const is_list_type   = ({ type }) => type === 'List'
 
 module.exports = {
   parse_int, parse_float, log, 
-  is_symbol, is_number, is_list, 
-  not_implemented
+  is_symbol_type, is_number_type, is_list_type
 }

@@ -1,7 +1,7 @@
 const { standard_env } = require('./env')
 const { Atom } = require('./atom')
 const {
-  log, newline, is_list_type
+  log, logln, newline, is_list_type
 } = require('./util')
 
 const not_implemented = feature => {
@@ -47,27 +47,33 @@ const evaluate = (x, enviroment = standard_env) => {
     return enviroment[x]
   } else if (!is_list(x)) {
     return x
-  } else if (leftmost === 'if') {
-    not_implemented('if')
-  } else if (leftmost === 'define') {
-    not_implemented('define')
-  } else {
-    not_implemented('proceedure call')
+  } else if (leftmost === 'if') {       // 'if' proc
+    const [_, test, consequence, alternative] = x
+    const expression = evaluate(test, enviroment) ? consequence : alternative
+    return evaluate(expression, enviroment)
+  } else if (leftmost === 'define') {   // 'define' proc
+    const [_, identifier, expression] = x
+    enviroment[identifier] = evaluate(expression, enviroment)
+  } else {                              // Proceedure call
+    const proc = evaluate(leftmost, enviroment)
+    const args = x.slice(1).map(arg => evaluate(arg, env))
+    return proc(...args)
   }
 }
 
-const repl = env => {
+const execute = program => evaluate(parse(program))
+
+const repl = (prompt = '>> ') => {
   process.stdin.setEncoding('utf8') // do we need this?
 
   let val
   while (true) {
-    log('>> ')
-    val = evaluate(parse(process.stdin.read()), env)
-    newline()
-    log(val)
+    log(prompt)
+    val = execute(process.stdin.read())
+    if (val !== '') logln(val)
   }
 }
 
-const execute = (program, env = standard_env) => evaluate(parse(program), env)
+
 
 module.exports = { execute, parse, evaluate, repl, read, tokenize }

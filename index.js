@@ -4,7 +4,6 @@ const { parse } = require('./src/core')
 TODO: Command line args, file reading
 */
 
-
 const main = program => {
   let result
   try {
